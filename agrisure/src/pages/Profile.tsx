@@ -4,32 +4,41 @@ function Profile() {
   return (
     <main className="page">
 
-      <section className="page-header">
+      <section className="profile-card">
 
-        <h1>Your Profile</h1>
+        <div className="profile-icon">
+          👤
+        </div>
+
+        <span>
+          AGRISURE ACCOUNT
+        </span>
+
+        <h1>
+          Your Profile
+        </h1>
 
         <p>
-          Manage your Agrisure profile and account information.
+          Login or create an account to manage
+          your Agrisure profile.
         </p>
 
-      </section>
+        <div className="profile-actions">
 
-      <section className="crop-section">
-
-        <h2>Welcome to Agrisure</h2>
-
-        <p>
-          Login or create an account to access your profile.
-        </p>
-
-        <div>
-          <Link to="/login">
+          <Link
+            to="/login"
+            className="card-button"
+          >
             Login
           </Link>
-          {" | "}
-          <Link to="/signup">
+
+          <Link
+            to="/signup"
+            className="card-button secondary-button"
+          >
             Create Account
           </Link>
+
         </div>
 
       </section>

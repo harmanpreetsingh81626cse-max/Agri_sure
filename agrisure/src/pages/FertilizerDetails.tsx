@@ -1,34 +1,8 @@
 import { Link, useParams } from "react-router-dom";
+import fertilizers from "../data/fertilizers";
 
 function FertilizerDetails() {
   const { fertilizerId } = useParams();
-
-  const fertilizers = [
-    {
-      id: "urea",
-      name: "Urea",
-      type: "Nitrogen Fertilizer",
-      nutrient: "Nitrogen",
-      use: "Helps promote vegetative growth and healthy leaves.",
-      crops: "Wheat, Rice, Maize and other crops"
-    },
-    {
-      id: "dap",
-      name: "DAP",
-      type: "Phosphorus Fertilizer",
-      nutrient: "Nitrogen and Phosphorus",
-      use: "Supports root development and early plant growth.",
-      crops: "Wheat, Rice, Maize and other crops"
-    },
-    {
-      id: "mop",
-      name: "MOP",
-      type: "Potassium Fertilizer",
-      nutrient: "Potassium",
-      use: "Supports overall plant development and crop quality.",
-      crops: "Various field and horticultural crops"
-    }
-  ];
 
   const fertilizer = fertilizers.find(
     (item) => item.id === fertilizerId
@@ -38,11 +12,9 @@ function FertilizerDetails() {
     return (
       <main className="page">
 
-        <h1>Fertilizer Not Found</h1>
-
-        <p>
-          The fertilizer you are looking for does not exist.
-        </p>
+        <h1>
+          Fertilizer Not Found
+        </h1>
 
         <Link to="/fertilizers">
           ← Back to Fertilizers
@@ -55,41 +27,113 @@ function FertilizerDetails() {
   return (
     <main className="page">
 
-      <section className="page-header">
-        <h1>{fertilizer.name}</h1>
+      <section className="fertilizer-detail-hero">
 
-        <p>
-          Information about {fertilizer.name}.
-        </p>
+        <div className="fertilizer-detail-image">
+
+          <img
+            src={fertilizer.image}
+            alt={fertilizer.name}
+          />
+
+        </div>
+
+        <div>
+
+          <span className="card-label">
+            FERTILIZER INFORMATION
+          </span>
+
+          <h1>
+            {fertilizer.name}
+          </h1>
+
+          <p>
+            {fertilizer.description}
+          </p>
+
+          <div className="fertilizer-meta">
+
+            <div>
+              <span>
+                Type
+              </span>
+
+              <strong>
+                {fertilizer.type}
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Nutrients
+              </span>
+
+              <strong>
+                {fertilizer.nutrients}
+              </strong>
+            </div>
+
+          </div>
+
+        </div>
+
       </section>
 
       <section className="crop-section">
 
-        <h2>Fertilizer Information</h2>
+        <div className="section-heading">
 
-        <p>
-          <strong>Type:</strong>{" "}
-          {fertilizer.type}
-        </p>
+          <span>
+            SUITABLE CROPS
+          </span>
 
-        <p>
-          <strong>Main Nutrient:</strong>{" "}
-          {fertilizer.nutrient}
-        </p>
+          <h2>
+            Where it may be used
+          </h2>
 
-        <p>
-          <strong>Use:</strong>{" "}
-          {fertilizer.use}
-        </p>
+        </div>
 
-        <p>
-          <strong>Suitable Crops:</strong>{" "}
-          {fertilizer.crops}
-        </p>
+        <div className="soil-list">
+
+          {fertilizer.suitableCrops.map(
+            (crop) => (
+              <span key={crop}>
+                🌱 {crop}
+              </span>
+            )
+          )}
+
+        </div>
 
       </section>
 
-      <Link to="/fertilizers">
+      <section className="nutrient-note">
+
+        <span>
+          🌿
+        </span>
+
+        <div>
+
+          <h3>
+            Remember
+          </h3>
+
+          <p>
+            Fertilizer selection and application should
+            be based on crop requirements, soil conditions
+            and appropriate agricultural recommendations.
+          </p>
+
+        </div>
+
+      </section>
+
+      <Link
+        to="/fertilizers"
+        className="back-link"
+      >
         ← Back to Fertilizers
       </Link>
 

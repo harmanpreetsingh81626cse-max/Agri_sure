@@ -14,12 +14,23 @@ function SoilCard({
   return (
     <article className="soil-card">
 
-      <h2>{name}</h2>
+      <div className="soil-icon">
+        🌱
+      </div>
 
-      <p>{description}</p>
+      <h2>
+        {name}
+      </h2>
 
-      <Link to={`/soil-crops/${id}`}>
-        View Suitable Crops
+      <p>
+        {description}
+      </p>
+
+      <Link
+        to={`/soil-crops/${id}`}
+        className="card-button"
+      >
+        View Suitable Crops →
       </Link>
 
     </article>

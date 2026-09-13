@@ -7,42 +7,87 @@ function Crops() {
   const [search, setSearch] = useState("");
 
   const filteredCrops = crops.filter((crop) =>
-    crop.name.toLowerCase().includes(search.toLowerCase())
+    crop.name
+      .toLowerCase()
+      .includes(search.toLowerCase())
   );
 
   return (
     <main className="page">
 
       <section className="page-header">
-        <h1>Explore Crops</h1>
+
+        <span>
+          AGRICULTURAL DATABASE
+        </span>
+
+        <h1>
+          Explore Crops
+        </h1>
 
         <p>
-          Explore crops, varieties, soil requirements, weather,
-          diseases and cultivation information.
+          Discover crops, varieties, soil requirements,
+          weather conditions and common diseases.
         </p>
+
       </section>
 
       <section className="search-section">
+
         <SearchBar
           value={search}
           onChange={setSearch}
           placeholder="Search for a crop..."
         />
+
+      </section>
+
+      <section className="results-heading">
+
+        <p>
+          Showing{" "}
+          <strong>
+            {filteredCrops.length}
+          </strong>{" "}
+          crops
+        </p>
+
       </section>
 
       <section className="crop-grid">
 
         {filteredCrops.length > 0 ? (
+
           filteredCrops.map((crop) => (
+
             <CropCard
               key={crop.id}
               id={crop.id}
               name={crop.name}
               description={crop.description}
+              image={crop.image}
+              varietyCount={crop.varieties.length}
+              diseaseCount={crop.diseases.length}
             />
+
           ))
+
         ) : (
-          <p>No crops found.</p>
+
+          <div className="empty-state">
+
+            <span>🌱</span>
+
+            <h2>
+              No crops found
+            </h2>
+
+            <p>
+              Try searching for another crop.
+            </p>
+
+          </div>
+
         )}
 
       </section>

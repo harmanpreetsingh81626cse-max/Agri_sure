@@ -1,66 +1,128 @@
 function About() {
+  return (
+    <main className="page">
 
-    return (
-        <main className="page">
+      <section className="page-header">
 
-            <section className="detail-header">
+        <span>
+          ABOUT AGRISURE
+        </span>
 
-                <p>ABOUT AGRISURE</p>
+        <h1>
+          Making agricultural
+          information simpler.
+        </h1>
 
-                <h1>Making Agricultural Information Easier</h1>
+        <p>
+          Agrisure brings useful crop, soil, variety,
+          calendar, disease and nutrient information
+          together in one platform.
+        </p>
 
-                <p>
-                    Agrisure is an agriculture information platform
-                    designed to make useful farming information
-                    easier to access and understand.
-                </p>
+      </section>
 
-            </section>
+      <section className="about-grid">
 
+        <article className="about-card">
 
-            <section className="about-grid">
+          <span>
+            🌾
+          </span>
 
-                <article className="about-card">
+          <h2>
+            Our Purpose
+          </h2>
 
-                    <h2>Our Goal</h2>
+          <p>
+            Agriculture involves many decisions.
+            Agrisure is designed to make basic
+            agricultural information easier to
+            explore and understand.
+          </p>
 
-                    <p>
-                        Agrisure aims to help farmers make more
-                        informed decisions by bringing important
-                        agricultural information together.
-                    </p>
+        </article>
 
-                </article>
+        <article className="about-card">
 
+          <span>
+            🌱
+          </span>
 
-                <article className="about-card">
+          <h2>
+            What We Provide
+          </h2>
 
-                    <h2>What We Provide</h2>
+          <p>
+            Users can explore crops, varieties,
+            suitable soil, weather conditions,
+            sowing periods, diseases and fertilizers.
+          </p>
 
-                    <p>
-                        Crop information, varieties, fertilizers,
-                        irrigation information, diseases and
-                        comparison tools.
-                    </p>
+        </article>
 
-                </article>
+        <article className="about-card">
 
+          <span>
+            💡
+          </span>
 
-                <article className="about-card">
+          <h2>
+            Built for Learning
+          </h2>
 
-                    <h2>Technology</h2>
+          <p>
+            Agrisure is also a practical demonstration
+            of modern frontend development using
+            React, TypeScript, CSS and responsive design.
+          </p>
 
-                    <p>
-                        The platform is built using React,
-                        TypeScript, Node.js, Express and MySQL.
-                    </p>
+        </article>
 
-                </article>
+      </section>
 
-            </section>
+      <section className="about-values">
 
-        </main>
-    );
+        <div>
+
+          <span>
+            AGRISURE
+          </span>
+
+          <h2>
+            Simple information.
+            Smarter exploration.
+          </h2>
+
+        </div>
+
+        <div>
+
+          <p>
+            Explore crops and varieties.
+          </p>
+
+          <p>
+            Match crops with soil.
+          </p>
+
+          <p>
+            Check the sowing calendar.
+          </p>
+
+          <p>
+            Learn about crop diseases.
+          </p>
+
+          <p>
+            Understand nutrient support.
+          </p>
+
+        </div>
+
+      </section>
+
+    </main>
+  );
 }
 
 export default About;

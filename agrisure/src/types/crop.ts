@@ -10,10 +10,12 @@ export interface Variety {
 export interface Disease {
   id: string;
   name: string;
+  image: string;
   cause: string;
   symptoms: string;
   prevention: string;
   management: string;
+  fertilizerIds: string[];
 }
 
 export interface Weather {
@@ -25,6 +27,7 @@ export interface Weather {
 export interface Crop {
   id: string;
   name: string;
+  image: string;
   description: string;
   suitableSoils: string[];
   weather: Weather;
@@ -35,6 +38,16 @@ export interface Crop {
 export interface Soil {
   id: string;
   name: string;
+  description: string;
+  suitableCrops: string[];
+}
+
+export interface Fertilizer {
+  id: string;
+  name: string;
+  image: string;
+  type: string;
+  nutrients: string;
   description: string;
   suitableCrops: string[];
 }

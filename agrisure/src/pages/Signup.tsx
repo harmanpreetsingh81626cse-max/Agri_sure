@@ -18,71 +18,105 @@ function Signup() {
   }
 
   return (
-    <main className="page">
+    <main className="auth-page">
 
-      <section className="page-header">
-        <h1>Create Account</h1>
+      <section className="auth-card">
+
+        <div className="auth-icon">
+          🌱
+        </div>
+
+        <span>
+          JOIN AGRISURE
+        </span>
+
+        <h1>
+          Create an Account
+        </h1>
 
         <p>
-          Create your Agrisure account.
+          Create your Agrisure account and explore smarter farming information.
         </p>
+
+        <form onSubmit={handleSubmit}>
+
+          <div className="form-group">
+
+            <label htmlFor="name">
+              Name
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) =>
+                setName(e.target.value)
+              }
+              placeholder="Enter your name"
+              required
+            />
+
+          </div>
+
+          <div className="form-group">
+
+            <label htmlFor="email">
+              Email
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              placeholder="Enter your email"
+              required
+            />
+
+          </div>
+
+          <div className="form-group">
+
+            <label htmlFor="password">
+              Password
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+              placeholder="Create a password"
+              required
+            />
+
+          </div>
+
+          <button
+            type="submit"
+            className="auth-button"
+          >
+            Create Account →
+          </button>
+
+        </form>
+
+        <p className="auth-footer">
+
+          Already have an account?{" "}
+
+          <Link to="/login">
+            Login
+          </Link>
+
+        </p>
+
       </section>
-
-      <form onSubmit={handleSubmit}>
-
-        <div>
-          <label>Name</label>
-
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label>Email</label>
-
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label>Password</label>
-
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Create a password"
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">
-          Sign Up
-        </button>
-
-      </form>
-
-      <br />
-
-      <p>
-        Already have an account?{" "}
-        <Link to="/login">
-          Login
-        </Link>
-      </p>
 
     </main>
   );

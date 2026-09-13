@@ -7,13 +7,17 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+
 import Crops from "./pages/Crops";
 import CropDetails from "./pages/CropDetails";
 import VarietyDetails from "./pages/VarietyDetails";
+
 import SoilCrops from "./pages/SoilCrops";
 import CropCalendar from "./pages/CropCalendar";
+
 import Fertilizers from "./pages/Fertilizers";
 import FertilizerDetails from "./pages/FertilizerDetails";
+
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
@@ -25,13 +29,33 @@ function App() {
 
       <Routes>
 
-        <Route path="/" element={<Home />} />
+        {/* Home */}
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<Profile />} />
+        {/* Authentication */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
-        <Route path="/crops" element={<Crops />} />
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
+
+        <Route
+          path="/profile"
+          element={<Profile />}
+        />
+
+        {/* Crops */}
+        <Route
+          path="/crops"
+          element={<Crops />}
+        />
 
         <Route
           path="/crops/:cropId"
@@ -43,16 +67,19 @@ function App() {
           element={<VarietyDetails />}
         />
 
+        {/* Soil */}
         <Route
           path="/soil-crops"
           element={<SoilCrops />}
         />
 
+        {/* Calendar */}
         <Route
           path="/crop-calendar"
           element={<CropCalendar />}
         />
 
+        {/* Fertilizers */}
         <Route
           path="/fertilizers"
           element={<Fertilizers />}
@@ -63,11 +90,13 @@ function App() {
           element={<FertilizerDetails />}
         />
 
+        {/* About */}
         <Route
           path="/about"
           element={<About />}
         />
 
+        {/* 404 */}
         <Route
           path="*"
           element={<NotFound />}

@@ -3,18 +3,27 @@ import { crops } from "../data/crops";
 import DiseaseCard from "../components/DiseaseCard";
 
 function VarietyDetails() {
-  const { cropId, varietyId } = useParams();
+  const {
+    cropId,
+    varietyId
+  } = useParams();
 
-  const crop = crops.find((item) => item.id === cropId);
+  const crop = crops.find(
+    (item) => item.id === cropId
+  );
 
   if (!crop) {
     return (
       <main className="page">
-        <h1>Crop Not Found</h1>
+
+        <h1>
+          Crop Not Found
+        </h1>
 
         <Link to="/crops">
           ← Back to Crops
         </Link>
+
       </main>
     );
   }
@@ -26,11 +35,15 @@ function VarietyDetails() {
   if (!variety) {
     return (
       <main className="page">
-        <h1>Variety Not Found</h1>
+
+        <h1>
+          Variety Not Found
+        </h1>
 
         <Link to={`/crops/${crop.id}`}>
           ← Back to {crop.name}
         </Link>
+
       </main>
     );
   }
@@ -39,88 +52,193 @@ function VarietyDetails() {
     <main className="page">
 
       <section className="page-header">
-        <h1>{variety.name}</h1>
+
+        <span>
+          {crop.name.toUpperCase()} VARIETY
+        </span>
+
+        <h1>
+          {variety.name}
+        </h1>
 
         <p>
-          {variety.name} is a variety of {crop.name}.
+          Detailed information about the{" "}
+          {variety.name} variety of{" "}
+          {crop.name}.
         </p>
+
+      </section>
+
+      <section className="variety-detail-grid">
+
+        <div className="variety-detail-card">
+
+          <span>⏱️</span>
+
+          <p>
+            Duration
+          </p>
+
+          <strong>
+            {variety.duration}
+          </strong>
+
+        </div>
+
+        <div className="variety-detail-card">
+
+          <span>🌾</span>
+
+          <p>
+            Expected Yield
+          </p>
+
+          <strong>
+            {variety.yield}
+          </strong>
+
+        </div>
+
+        <div className="variety-detail-card">
+
+          <span>🌱</span>
+
+          <p>
+            Sowing
+          </p>
+
+          <strong>
+            {variety.sowingMonths.join(", ")}
+          </strong>
+
+        </div>
+
+        <div className="variety-detail-card">
+
+          <span>🧺</span>
+
+          <p>
+            Harvest
+          </p>
+
+          <strong>
+            {variety.harvestMonths.join(", ")}
+          </strong>
+
+        </div>
+
       </section>
 
       <section className="crop-section">
-        <h2>Variety Information</h2>
 
-        <p>
-          <strong>Crop:</strong> {crop.name}
-        </p>
+        <div className="section-heading">
 
-        <p>
-          <strong>Duration:</strong> {variety.duration}
-        </p>
+          <span>
+            CROP CONDITIONS
+          </span>
 
-        <p>
-          <strong>Expected Yield:</strong> {variety.yield}
-        </p>
+          <h2>
+            Suitable Soil
+          </h2>
 
-        <p>
-          <strong>Sowing Months:</strong>{" "}
-          {variety.sowingMonths.join(", ")}
-        </p>
-
-        <p>
-          <strong>Harvest Months:</strong>{" "}
-          {variety.harvestMonths.join(", ")}
-        </p>
-      </section>
-
-      <section className="crop-section">
-        <h2>Suitable Soil</h2>
+        </div>
 
         <div className="soil-list">
+
           {crop.suitableSoils.map((soil) => (
             <span key={soil}>
-              {soil}
+              🌱 {soil}
             </span>
           ))}
+
         </div>
+
       </section>
 
       <section className="crop-section">
-        <h2>Favorable Weather</h2>
 
-        <p>
-          <strong>Temperature:</strong>{" "}
-          {crop.weather.temperature}
-        </p>
+        <div className="section-heading">
 
-        <p>
-          <strong>Rainfall:</strong>{" "}
-          {crop.weather.rainfall}
-        </p>
+          <span>
+            WEATHER
+          </span>
 
-        <p>
-          <strong>Humidity:</strong>{" "}
-          {crop.weather.humidity}
-        </p>
+          <h2>
+            Favorable Conditions
+          </h2>
+
+        </div>
+
+        <div className="weather-grid">
+
+          <div className="weather-card">
+            <span>🌡️</span>
+            <p>Temperature</p>
+            <strong>
+              {crop.weather.temperature}
+            </strong>
+          </div>
+
+          <div className="weather-card">
+            <span>🌧️</span>
+            <p>Rainfall</p>
+            <strong>
+              {crop.weather.rainfall}
+            </strong>
+          </div>
+
+          <div className="weather-card">
+            <span>💧</span>
+            <p>Humidity</p>
+            <strong>
+              {crop.weather.humidity}
+            </strong>
+          </div>
+
+        </div>
+
       </section>
 
       <section className="crop-section">
-        <h2>Common Diseases</h2>
+
+        <div className="section-heading">
+
+          <span>
+            CROP HEALTH
+          </span>
+
+          <h2>
+            Common Diseases
+          </h2>
+
+        </div>
 
         <div className="disease-grid">
+
           {crop.diseases.map((disease) => (
+
             <DiseaseCard
               key={disease.id}
+              id={disease.id}
               name={disease.name}
+              image={disease.image}
               cause={disease.cause}
               symptoms={disease.symptoms}
               prevention={disease.prevention}
               management={disease.management}
+              fertilizerIds={disease.fertilizerIds}
             />
+
           ))}
+
         </div>
+
       </section>
 
-      <Link to={`/crops/${crop.id}`}>
+      <Link
+        to={`/crops/${crop.id}`}
+        className="back-link"
+      >
         ← Back to {crop.name}
       </Link>
 

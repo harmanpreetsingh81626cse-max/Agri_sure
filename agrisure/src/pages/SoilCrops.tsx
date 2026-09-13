@@ -3,65 +3,100 @@ import { Link } from "react-router-dom";
 import { crops } from "../data/crops";
 
 function SoilCrops() {
-  const [selectedSoil, setSelectedSoil] = useState("All");
+  const [selectedSoil, setSelectedSoil] =
+    useState("All");
 
-  // Get all different soil types
   const soils = [
     "All",
     ...Array.from(
-      new Set(crops.flatMap((crop) => crop.suitableSoils))
+      new Set(
+        crops.flatMap(
+          (crop) => crop.suitableSoils
+        )
+      )
     )
   ];
 
-  // Find crops suitable for selected soil
   const filteredCrops =
     selectedSoil === "All"
       ? crops
       : crops.filter((crop) =>
-          crop.suitableSoils.includes(selectedSoil)
+          crop.suitableSoils.includes(
+            selectedSoil
+          )
         );
 
   return (
     <main className="page">
 
       <section className="page-header">
-        <h1>Soil & Crops</h1>
+
+        <span>
+          SMART SOIL MATCHING
+        </span>
+
+        <h1>
+          Soil & Crops
+        </h1>
 
         <p>
-          Select your soil type to discover suitable crops
-          and their varieties.
+          Select a soil type to discover crops
+          suitable for it.
         </p>
+
       </section>
 
+      <section className="soil-selector">
 
-      {/* Soil Selection */}
+        <div>
 
-      <section className="soil-selection">
+          <span>
+            SELECT SOIL TYPE
+          </span>
 
-        <h2>Select Soil Type</h2>
+          <h2>
+            Find Suitable Crops
+          </h2>
+
+        </div>
 
         <select
           value={selectedSoil}
-          onChange={(e) => setSelectedSoil(e.target.value)}
+          onChange={(e) =>
+            setSelectedSoil(e.target.value)
+          }
         >
+
           {soils.map((soil) => (
-            <option key={soil} value={soil}>
+
+            <option
+              key={soil}
+              value={soil}
+            >
               {soil}
             </option>
+
           ))}
+
         </select>
 
       </section>
 
-
-      {/* Suitable Crops */}
-
       <section className="crop-section">
 
-        <h2>
-          Suitable Crops
-          {selectedSoil !== "All" && ` for ${selectedSoil}`}
-        </h2>
+        <div className="section-heading">
+
+          <span>
+            RESULTS
+          </span>
+
+          <h2>
+            {selectedSoil === "All"
+              ? "All Crops"
+              : `Crops suitable for ${selectedSoil}`}
+          </h2>
+
+        </div>
 
         <div className="crop-grid">
 
@@ -74,18 +109,50 @@ function SoilCrops() {
                 key={crop.id}
               >
 
-                <h3>{crop.name}</h3>
+                <div className="card-image-container">
 
-                <p>{crop.description}</p>
+                  <img
+                    src={crop.image}
+                    alt={crop.name}
+                    className="card-image"
+                  />
 
-                <p>
-                  <strong>Varieties:</strong>{" "}
-                  {crop.varieties.length}
-                </p>
+                </div>
 
-                <Link to={`/crops/${crop.id}`}>
-                  View Crop & Varieties →
-                </Link>
+                <div className="crop-card-content">
+
+                  <span className="card-label">
+                    {crop.varieties.length} VARIETIES
+                  </span>
+
+                  <h2>
+                    {crop.name}
+                  </h2>
+
+                  <p>
+                    {crop.description}
+                  </p>
+
+                  <div className="soil-list small-soil-list">
+
+                    {crop.suitableSoils
+                      .slice(0, 3)
+                      .map((soil) => (
+                        <span key={soil}>
+                          {soil}
+                        </span>
+                      ))}
+
+                  </div>
+
+                  <Link
+                    to={`/crops/${crop.id}`}
+                    className="card-button"
+                  >
+                    View Crop →
+                  </Link>
+
+                </div>
 
               </article>
 
@@ -93,9 +160,19 @@ function SoilCrops() {
 
           ) : (
 
-            <p>
-              No crops found for this soil type.
-            </p>
+            <div className="empty-state">
+
+              <span>🌱</span>
+
+              <h2>
+                No suitable crops found
+              </h2>
+
+              <p>
+                Try selecting another soil type.
+              </p>
+
+            </div>
 
           )}
 

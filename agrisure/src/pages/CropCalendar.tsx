@@ -18,57 +18,112 @@ function CropCalendar() {
     "December"
   ];
 
-  const [selectedMonth, setSelectedMonth] = useState("January");
+  const currentMonth = new Date().toLocaleString(
+    "en-US",
+    {
+      month: "long"
+    }
+  );
 
-  // Find crops that can be sown in the selected month
-  const cropsForMonth = crops.filter((crop) =>
-    crop.varieties.some((variety) =>
-      variety.sowingMonths.includes(selectedMonth)
-    )
+  const [selectedMonth, setSelectedMonth] =
+    useState(currentMonth);
+
+  const cropsForMonth = crops.filter(
+    (crop) =>
+      crop.varieties.some((variety) =>
+        variety.sowingMonths.includes(
+          selectedMonth
+        )
+      )
   );
 
   return (
     <main className="page">
 
-      {/* Header */}
-
       <section className="page-header">
-        <h1>Crop Calendar</h1>
+
+        <span>
+          SMART SOWING GUIDE
+        </span>
+
+        <h1>
+          Crop Calendar
+        </h1>
 
         <p>
-          Find crops and their varieties that can be
+          Find crops and varieties that can be
           sown during a particular month.
         </p>
+
       </section>
 
+      <section className="calendar-top">
 
-      {/* Month Selection */}
+        <div>
+
+          <span>
+            CURRENT MONTH
+          </span>
+
+          <h2>
+            {currentMonth}
+          </h2>
+
+          <p>
+            The calendar automatically starts
+            with the current month.
+          </p>
+
+        </div>
+
+        <div className="calendar-icon">
+          📅
+        </div>
+
+      </section>
 
       <section className="calendar-selection">
 
-        <h2>Select Month</h2>
+        <label htmlFor="month">
+          Select Month
+        </label>
 
         <select
+          id="month"
           value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
+          onChange={(e) =>
+            setSelectedMonth(e.target.value)
+          }
         >
+
           {months.map((month) => (
-            <option key={month} value={month}>
+
+            <option
+              key={month}
+              value={month}
+            >
               {month}
             </option>
+
           ))}
+
         </select>
 
       </section>
 
+      <section className="crop-section">
 
-      {/* Crops */}
+        <div className="section-heading">
 
-      <section className="calendar-results">
+          <span>
+            SOWING GUIDE
+          </span>
 
-        <h2>
-          Crops that can be sown in {selectedMonth}
-        </h2>
+          <h2>
+            Crops for {selectedMonth}
+          </h2>
+
+        </div>
 
         {cropsForMonth.length > 0 ? (
 
@@ -76,35 +131,62 @@ function CropCalendar() {
 
             {cropsForMonth.map((crop) => {
 
-              // Find only varieties that can be sown this month
-              const suitableVarieties = crop.varieties.filter(
-                (variety) =>
-                  variety.sowingMonths.includes(selectedMonth)
-              );
+              const suitableVarieties =
+                crop.varieties.filter(
+                  (variety) =>
+                    variety.sowingMonths.includes(
+                      selectedMonth
+                    )
+                );
 
               return (
                 <article
-                  className="crop-card"
+                  className="calendar-crop-card"
                   key={crop.id}
                 >
 
-                  <h3>{crop.name}</h3>
+                  <div className="calendar-crop-image">
 
-                  <p>{crop.description}</p>
+                    <img
+                      src={crop.image}
+                      alt={crop.name}
+                    />
 
-                  <h4>Available Varieties</h4>
+                  </div>
 
-                  <ul>
-                    {suitableVarieties.map((variety) => (
-                      <li key={variety.id}>
-                        {variety.name}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="calendar-crop-content">
 
-                  <Link to={`/crops/${crop.id}`}>
-                    View Crop Details →
-                  </Link>
+                    <span>
+                      {selectedMonth}
+                    </span>
+
+                    <h3>
+                      {crop.name}
+                    </h3>
+
+                    <p>
+                      Varieties suitable for sowing:
+                    </p>
+
+                    <div className="variety-tags">
+
+                      {suitableVarieties.map(
+                        (variety) => (
+                          <span key={variety.id}>
+                            {variety.name}
+                          </span>
+                        )
+                      )}
+
+                    </div>
+
+                    <Link
+                      to={`/crops/${crop.id}`}
+                    >
+                      View Crop Details →
+                    </Link>
+
+                  </div>
 
                 </article>
               );
@@ -114,9 +196,20 @@ function CropCalendar() {
 
         ) : (
 
-          <p>
-            No crop information is available for {selectedMonth}.
-          </p>
+          <div className="empty-state">
+
+            <span>📅</span>
+
+            <h2>
+              No crop information available
+            </h2>
+
+            <p>
+              We don't currently have sowing
+              information for {selectedMonth}.
+            </p>
+
+          </div>
 
         )}
 

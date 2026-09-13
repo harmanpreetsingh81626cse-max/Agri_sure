@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 function Navbar() {
   return (
     <nav className="navbar">
-      <div className="logo">
-        <Link to="/">Agrisure</Link>
-      </div>
+
+      <Link to="/" className="logo">
+        Agrisure
+      </Link>
 
       <div className="nav-links">
         <Link to="/">Home</Link>
@@ -14,8 +15,12 @@ function Navbar() {
         <Link to="/crop-calendar">Crop Calendar</Link>
         <Link to="/fertilizers">Fertilizers</Link>
         <Link to="/about">About</Link>
-        <Link to="/profile">Profile</Link>
       </div>
+
+      <Link to="/profile" className="profile-link">
+        👤 Profile
+      </Link>
+
     </nav>
   );
 }

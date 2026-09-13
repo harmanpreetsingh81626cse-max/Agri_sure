@@ -1,66 +1,68 @@
-import { Link } from "react-router-dom";
+import FertilizerCard from "../components/FertilizerCard";
+import fertilizers from "../data/fertilizers";
 
 function Fertilizers() {
-  const fertilizers = [
-    {
-      id: "urea",
-      name: "Urea",
-      type: "Nitrogen Fertilizer",
-      description:
-        "Urea is a commonly used nitrogen fertilizer that helps promote plant growth and healthy leaves."
-    },
-    {
-      id: "dap",
-      name: "DAP",
-      type: "Phosphorus Fertilizer",
-      description:
-        "DAP provides nitrogen and phosphorus and is commonly used to support root and plant development."
-    },
-    {
-      id: "mop",
-      name: "MOP",
-      type: "Potassium Fertilizer",
-      description:
-        "MOP is a potassium fertilizer that supports plant growth and overall crop development."
-    }
-  ];
-
   return (
     <main className="page">
 
       <section className="page-header">
-        <h1>Fertilizers</h1>
+
+        <span>
+          NUTRIENT INFORMATION
+        </span>
+
+        <h1>
+          Fertilizers
+        </h1>
 
         <p>
-          Explore commonly used fertilizers and learn about
-          their basic uses in crop cultivation.
+          Explore fertilizers and nutrients commonly
+          used in crop cultivation.
         </p>
+
       </section>
 
-      <section className="crop-grid">
+      <section className="fertilizer-intro">
+
+        <div>
+
+          <span>
+            IMPORTANT
+          </span>
+
+          <h2>
+            Balanced nutrition matters.
+          </h2>
+
+          <p>
+            Fertilizer requirements depend on the crop,
+            soil and nutrient status. Actual applications
+            should be based on appropriate agricultural
+            recommendations and soil testing where available.
+          </p>
+
+        </div>
+
+        <div className="fertilizer-intro-icon">
+          🧪
+        </div>
+
+      </section>
+
+      <section className="fertilizer-grid">
 
         {fertilizers.map((fertilizer) => (
-          <article
-            className="crop-card"
+
+          <FertilizerCard
             key={fertilizer.id}
-          >
-            <h2>{fertilizer.name}</h2>
+            id={fertilizer.id}
+            name={fertilizer.name}
+            image={fertilizer.image}
+            type={fertilizer.type}
+            nutrients={fertilizer.nutrients}
+            description={fertilizer.description}
+          />
 
-            <p>
-              <strong>Type:</strong>{" "}
-              {fertilizer.type}
-            </p>
-
-            <p>
-              {fertilizer.description}
-            </p>
-
-            <Link
-              to={`/fertilizers/${fertilizer.id}`}
-            >
-              View Fertilizer →
-            </Link>
-          </article>
         ))}
 
       </section>
