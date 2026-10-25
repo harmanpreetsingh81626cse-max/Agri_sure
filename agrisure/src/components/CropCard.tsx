@@ -1,4 +1,6 @@
+import { ArrowRight, Bug, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
+import BookmarkButton from "./BookmarkButton";
 
 interface CropCardProps {
   id: string;
@@ -15,58 +17,32 @@ function CropCard({
   description,
   image,
   varietyCount,
-  diseaseCount
+  diseaseCount,
 }: CropCardProps) {
   return (
     <article className="crop-card">
-
-      <div className="card-image-container">
-
-        <img
-          src={image}
-          alt={`${name} crop`}
-          className="card-image"
-        />
-
+      <div className="card-image-box">
+        <img src={image} alt={name} className="card-image" />
+        <BookmarkButton cropId={id} cropName={name} />
       </div>
 
-      <div className="crop-card-content">
-
-        <span className="card-label">
-          CROP
-        </span>
-
-        <h2>{name}</h2>
-
-        <p>
-          {description}
-        </p>
+      <div className="card-body">
+        <h3>{name}</h3>
+        <p className="card-text">{description}</p>
 
         <div className="card-stats">
-
           {varietyCount !== undefined && (
-            <span>
-              🌱 {varietyCount} Varieties
-            </span>
+            <span><Leaf size={15} /> {varietyCount} Varieties</span>
           )}
-
           {diseaseCount !== undefined && (
-            <span>
-              🦠 {diseaseCount} Diseases
-            </span>
+            <span><Bug size={15} /> {diseaseCount} Diseases</span>
           )}
-
         </div>
 
-        <Link
-          to={`/crops/${id}`}
-          className="card-button"
-        >
-          Explore Crop →
+        <Link to={`/crops/${id}`} className="card-link">
+          Explore crop <ArrowRight size={16} />
         </Link>
-
       </div>
-
     </article>
   );
 }

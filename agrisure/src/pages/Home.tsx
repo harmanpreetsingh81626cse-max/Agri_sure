@@ -1,418 +1,274 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { crops } from "../data/crops";
+import {
+  ArrowRight,
+  Bookmark,
+  Bug,
+  CalendarDays,
+  FlaskConical,
+  Layers,
+  Leaf,
+  Search,
+  Sprout,
+} from "lucide-react";
+import CropCard from "../components/CropCard";
+import { useAuth } from "../contexts/AuthContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { fetchCrops } from "../store/cropsSlice";
+
+// change these paths to use your old home page images
+const HERO_IMAGES = {
+  main: "/images/crops/wheat.jpg",
+  top: "/images/crops/tomato.jpg",
+  bottom: "/images/crops/cotton.jpg",
+  banner: "/images/crops/sugarcane.jpg",
+};
+
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+const features = [
+  { icon: Sprout, title: "Crops", text: "Browse crops with their varieties, weather needs and diseases.", to: "/crops" },
+  { icon: Layers, title: "Soil & Crops", text: "Pick a soil type and see which crops grow best in it.", to: "/soil-crops" },
+  { icon: CalendarDays, title: "Crop Calendar", text: "Know when to sow and harvest through the year.", to: "/crop-calendar" },
+  { icon: FlaskConical, title: "Fertilizers", text: "Learn which fertilizers suit which crops.", to: "/fertilizers" },
+];
+
+const steps = [
+  { icon: Search, title: "Find a crop", text: "Search by name or filter crops by soil type." },
+  { icon: Leaf, title: "Learn about it", text: "See varieties, weather needs, sowing months and diseases." },
+  { icon: Bookmark, title: "Save your favourites", text: "Log in and bookmark crops to keep them in your profile." },
+];
+
+interface HomeCrop {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  varieties: { id: string; name: string; sowingMonths: string[] }[];
+  diseases: unknown[];
+}
 
 function Home() {
-  const currentMonth = new Date().toLocaleString("en-US", {
-    month: "long"
-  });
+  const dispatch = useAppDispatch();
+  const { items, status } = useAppSelector((state) => state.crops);
+  const { user } = useAuth();
 
-  const currentMonthCrops = crops.filter((crop) =>
-    crop.varieties.some((variety) =>
-      variety.sowingMonths.includes(currentMonth)
-    )
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchCrops());
+    }
+  }, [dispatch, status]);
+
+  const crops = items as unknown as HomeCrop[];
+  const ready = status === "succeeded";
+
+  const totalVarieties = crops.reduce((sum, crop) => sum + crop.varieties.length, 0);
+  const totalDiseases = crops.reduce((sum, crop) => sum + crop.diseases.length, 0);
+
+  const currentMonth = months[new Date().getMonth()];
+  const sowNow = crops.filter((crop) =>
+    crop.varieties.some((variety) => variety.sowingMonths.includes(currentMonth))
   );
+
+  const stats = [
+    { icon: Sprout, value: ready ? crops.length : "-", label: "Crops" },
+    { icon: Leaf, value: ready ? totalVarieties : "-", label: "Varieties" },
+    { icon: Bug, value: ready ? totalDiseases : "-", label: "Diseases" },
+    { icon: FlaskConical, value: 8, label: "Fertilizers" },
+  ];
 
   return (
     <main>
+      {/* ---------- Hero ---------- */}
+      <section className="home-hero">
+        <div className="home-hero-inner">
+          <div className="home-hero-text">
+            <span className="tag">Smart farming guide</span>
+            <h1>
+              Grow better crops with <span className="highlight">Agrisure</span>
+            </h1>
+            <p>
+              Explore crops, soils, seasons and fertilizers in one simple place,
+              and save your favourite crops to your own profile.
+            </p>
 
-      {/* HERO */}
-      <section
-        className="hero"
-        style={{
-          backgroundImage: "url('/images/home/hero.jpg')"
-        }}
-      >
-        <div className="hero-overlay"></div>
-
-        <div className="hero-content">
-
-          <span className="hero-badge">
-            🌱 SMART AGRICULTURE PLATFORM
-          </span>
-
-          <h1>
-            Smarter Farming.
-            <br />
-            <span>Better Decisions.</span>
-          </h1>
-
-          <p>
-            Explore crops, varieties, soil requirements,
-            sowing seasons, diseases and nutrient information
-            in one simple platform.
-          </p>
-
-          <div className="hero-actions">
-
-            <Link
-              to="/crops"
-              className="hero-button primary-button"
-            >
-              Explore Crops →
-            </Link>
-
-            <Link
-              to="/crop-calendar"
-              className="hero-button outline-button"
-            >
-              View Calendar
-            </Link>
-
+            <div className="hero-buttons">
+              <Link to="/crops" className="btn btn-green">
+                Explore crops <ArrowRight size={16} />
+              </Link>
+              {user ? (
+                <Link to="/profile" className="btn btn-light">
+                  <Bookmark size={16} /> My bookmarks
+                </Link>
+              ) : (
+                <Link to="/signup" className="btn btn-light">
+                  Create account
+                </Link>
+              )}
+            </div>
           </div>
 
+          <div className="hero-collage">
+            <img src={HERO_IMAGES.main} alt="Wheat field" className="collage-main" />
+            <img src={HERO_IMAGES.top} alt="Tomato plants" className="collage-small collage-top" />
+            <img src={HERO_IMAGES.bottom} alt="Cotton field" className="collage-small collage-bottom" />
+
+            <div className="collage-badge">
+              <Sprout size={20} />
+              <div>
+                <strong>{ready ? crops.length : "15"}+ crops</strong>
+                <small>with full details</small>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div className="hero-visual">
-
-          <div className="hero-circle">
-            🌾
-          </div>
-
-          <div className="hero-floating-card card-one">
-            🌱
-            <span>Healthy Crops</span>
-          </div>
-
-          <div className="hero-floating-card card-two">
-            📅
-            <span>Smart Calendar</span>
-          </div>
-
-        </div>
-
       </section>
 
+      {/* ---------- Stats ---------- */}
+      <section className="stats-strip">
+        {stats.map((item) => (
+          <div className="stat-box" key={item.label}>
+            <div className="stat-icon">
+              <item.icon size={22} />
+            </div>
+            <div>
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </div>
+          </div>
+        ))}
+      </section>
 
-      {/* FEATURES */}
-      <section className="home-section">
-
-        <div className="section-heading">
-
-          <span>EXPLORE AGRISURE</span>
-
-          <h2>
-            Everything you need,
-            <br />
-            in one place.
-          </h2>
-
+      {/* ---------- Features ---------- */}
+      <section className="page home-section">
+        <div className="page-header">
+          <span className="tag">What you can do</span>
+          <h2 className="big-title">Everything in one place</h2>
+          <p>Pick a section to start learning.</p>
         </div>
 
         <div className="feature-grid">
-
-          <article className="feature-card">
-
-            <div className="feature-icon">
-              🌾
-            </div>
-
-            <h3>
-              Crops & Varieties
-            </h3>
-
-            <p>
-              Explore crops, their varieties,
-              growing conditions and expected yield.
-            </p>
-
-            <Link to="/crops">
-              Explore →
+          {features.map((item) => (
+            <Link to={item.to} className="feature-card" key={item.title}>
+              <div className="feature-icon">
+                <item.icon size={24} />
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+              <span className="card-link">
+                Open <ArrowRight size={16} />
+              </span>
             </Link>
-
-          </article>
-
-
-          <article className="feature-card">
-
-            <div className="feature-icon">
-              🌱
-            </div>
-
-            <h3>
-              Soil & Crops
-            </h3>
-
-            <p>
-              Find crops that are suitable
-              for different soil types.
-            </p>
-
-            <Link to="/soil-crops">
-              Find Crops →
-            </Link>
-
-          </article>
-
-
-          <article className="feature-card">
-
-            <div className="feature-icon">
-              📅
-            </div>
-
-            <h3>
-              Crop Calendar
-            </h3>
-
-            <p>
-              Discover which crops and varieties
-              can be sown during each month.
-            </p>
-
-            <Link to="/crop-calendar">
-              View Calendar →
-            </Link>
-
-          </article>
-
-
-          <article className="feature-card">
-
-            <div className="feature-icon">
-              🧪
-            </div>
-
-            <h3>
-              Nutrient Support
-            </h3>
-
-            <p>
-              Learn about fertilizers and the
-              nutrients they provide.
-            </p>
-
-            <Link to="/fertilizers">
-              Explore →
-            </Link>
-
-          </article>
-
+          ))}
         </div>
-
       </section>
 
-
-      {/* FARM LANDSCAPE */}
-      <section className="home-image-section">
-
-        <div className="home-image-content">
-
-          <span>
-            SMART FARMING
-          </span>
-
-          <h2>
-            Better information
-            <br />
-            for better farming.
-          </h2>
-
-          <p>
-            Agrisure brings crop, soil, calendar,
-            disease and fertilizer information together
-            so that important farming decisions are easier
-            to understand.
-          </p>
-
-          <Link
-            to="/about"
-            className="card-button"
-          >
-            Learn More About Agrisure →
-          </Link>
-
-        </div>
-
-        <div className="home-image-wrapper">
-
-          <img
-            src="/images/home/farm-landscape.jpg"
-            alt="Agricultural farm landscape"
-          />
-
-        </div>
-
-      </section>
-
-
-      {/* POPULAR CROPS */}
-      <section className="home-section">
-
-        <div className="section-heading section-heading-row">
-
-          <div>
-
-            <span>
-              DISCOVER
-            </span>
-
-            <h2>
-              Popular Crops
-            </h2>
-
+      {/* ---------- Featured crops ---------- */}
+      {ready && crops.length > 0 && (
+        <section className="page home-section">
+          <div className="section-row">
+            <div>
+              <span className="tag">Featured</span>
+              <h2 className="big-title">Popular crops</h2>
+            </div>
+            <Link to="/crops" className="card-link">
+              View all crops <ArrowRight size={16} />
+            </Link>
           </div>
 
-          <Link
-            to="/crops"
-            className="section-link"
-          >
-            View All Crops →
-          </Link>
-
-        </div>
-
-
-        <div className="crop-grid">
-
-          {crops.slice(0, 6).map((crop) => (
-
-            <article
-              className="home-crop-card"
-              key={crop.id}
-            >
-
-              <div className="home-crop-image">
-
-                <img
-                  src={crop.image}
-                  alt={crop.name}
-                />
-
-                <span>
-                  {crop.varieties.length} varieties
-                </span>
-
-              </div>
-
-
-              <div className="home-crop-content">
-
-                <h3>
-                  {crop.name}
-                </h3>
-
-                <p>
-                  {crop.description}
-                </p>
-
-                <Link
-                  to={`/crops/${crop.id}`}
-                >
-                  Explore Crop →
-                </Link>
-
-              </div>
-
-            </article>
-
-          ))}
-
-        </div>
-
-      </section>
-
-
-      {/* CROP CALENDAR */}
-      <section className="calendar-preview">
-
-        <div>
-
-          <span>
-            THIS MONTH
-          </span>
-
-          <h2>
-            What can you sow in {currentMonth}?
-          </h2>
-
-          <p>
-            Check crops and varieties that are
-            suitable for sowing this month.
-          </p>
-
-          <Link
-            to="/crop-calendar"
-            className="card-button"
-          >
-            Open Crop Calendar →
-          </Link>
-
-        </div>
-
-
-        <div className="calendar-preview-icon">
-          📅
-        </div>
-
-
-        <div className="calendar-preview-crops">
-
-          {currentMonthCrops
-            .slice(0, 4)
-            .map((crop) => (
-
-              <span key={crop.id}>
-                🌱 {crop.name}
-              </span>
-
+          <div className="crop-grid">
+            {crops.slice(0, 4).map((crop) => (
+              <CropCard
+                key={crop.id}
+                id={crop.id}
+                name={crop.name}
+                description={crop.description}
+                image={crop.image}
+                varietyCount={crop.varieties.length}
+                diseaseCount={crop.diseases.length}
+              />
             ))}
+          </div>
+        </section>
+      )}
 
+      {/* ---------- Sow this month ---------- */}
+      {ready && sowNow.length > 0 && (
+        <section className="page home-section">
+          <div className="sow-panel">
+            <div className="sow-text">
+              <span className="tag">This month</span>
+              <h2>What to sow in {currentMonth}</h2>
+              <p>
+                These crops have varieties that can be sown right now. Open the
+                calendar to check other months.
+              </p>
+              <Link to="/crop-calendar" className="btn btn-green">
+                Open crop calendar <ArrowRight size={16} />
+              </Link>
+            </div>
 
-          {currentMonthCrops.length === 0 && (
+            <div className="sow-list">
+              {sowNow.map((crop) => (
+                <Link to={`/crops/${crop.id}`} className="sow-item" key={crop.id}>
+                  <img src={crop.image} alt={crop.name} />
+                  <span>{crop.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
-            <span>
-              No crop data available.
-            </span>
-
-          )}
-
+      {/* ---------- How it works ---------- */}
+      <section className="page home-section">
+        <div className="page-header">
+          <span className="tag">How it works</span>
+          <h2 className="big-title">Three simple steps</h2>
         </div>
 
+        <div className="steps-grid">
+          {steps.map((step, index) => (
+            <div className="step-card" key={step.title}>
+              <span className="step-number">{index + 1}</span>
+              <div className="feature-icon">
+                <step.icon size={24} />
+              </div>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-
-      {/* FARMER TECHNOLOGY / DISEASE */}
-      <section className="home-image-section reverse">
-
-        <div className="home-image-wrapper">
-
-          <img
-            src="/images/home/farmer-technology.jpg"
-            alt="Farmer using modern agricultural technology"
-          />
-
+      {/* ---------- Banner ---------- */}
+      <section className="page home-section">
+        <div
+          className="cta-banner"
+          style={{ backgroundImage: `url(${HERO_IMAGES.banner})` }}
+        >
+          <div className="cta-overlay">
+            <h2>Save the crops you care about</h2>
+            <p>
+              Create a free profile and bookmark crops. They will be here every
+              time you log back in.
+            </p>
+            {user ? (
+              <Link to="/profile" className="btn btn-light">
+                Go to my profile <ArrowRight size={16} />
+              </Link>
+            ) : (
+              <div className="hero-buttons center">
+                <Link to="/signup" className="btn btn-green">Create account</Link>
+                <Link to="/login" className="btn btn-light">Login</Link>
+              </div>
+            )}
+          </div>
         </div>
-
-
-        <div className="home-image-content">
-
-          <span>
-            CROP HEALTH
-          </span>
-
-          <h2>
-            Identify problems
-            <br />
-            before they spread.
-          </h2>
-
-          <p>
-            Agrisure provides information about common
-            crop diseases, their causes, symptoms,
-            prevention and management.
-          </p>
-
-          <Link
-            to="/crops"
-            className="card-button"
-          >
-            Explore Crop Diseases →
-          </Link>
-
-        </div>
-
       </section>
-
     </main>
   );
 }

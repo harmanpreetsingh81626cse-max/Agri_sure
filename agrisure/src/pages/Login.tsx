@@ -1,107 +1,75 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { LogIn } from "lucide-react";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import { useAuth } from "../contexts/AuthContext";
 
 function Login() {
-  const [email, setEmail] =
-    useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const [password, setPassword] =
-    useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  function handleSubmit(
-    e: React.FormEvent
-  ) {
-    e.preventDefault();
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
 
-    console.log(
-      "Login:",
-      email,
-      password
-    );
+    if (!email.trim() || !password) {
+      setError("Please enter your email and password.");
+      return;
+    }
+
+    try {
+      setBusy(true);
+      await login(email, password);
+      navigate("/profile");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not log in.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
     <main className="auth-page">
-
       <section className="auth-card">
-
         <div className="auth-icon">
-          🌿
+          <LogIn size={26} />
         </div>
+        <h1>Welcome back</h1>
+        <p className="auth-sub">Login to see your profile and saved crops.</p>
 
-        <span>
-          WELCOME BACK
-        </span>
+        <form onSubmit={handleSubmit} noValidate>
+          <Input
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
+          <Input
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+          />
 
-        <h1>
-          Login to Agrisure
-        </h1>
+          {error && <p className="form-error" role="alert">{error}</p>}
 
-        <p>
-          Continue exploring smarter farming information.
-        </p>
-
-        <form onSubmit={handleSubmit}>
-
-          <div className="form-group">
-
-            <label htmlFor="email">
-              Email
-            </label>
-
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
-              placeholder="Enter your email"
-              required
-            />
-
-          </div>
-
-          <div className="form-group">
-
-            <label htmlFor="password">
-              Password
-            </label>
-
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
-              placeholder="Enter your password"
-              required
-            />
-
-          </div>
-
-          <button
-            type="submit"
-            className="auth-button"
-          >
-            Login →
-          </button>
-
+          <Button type="submit" disabled={busy}>
+            {busy ? "Logging in..." : "Login"}
+          </Button>
         </form>
 
         <p className="auth-footer">
-
-          Don't have an account?{" "}
-
-          <Link to="/signup">
-            Create one
-          </Link>
-
+          Don't have an account? <Link to="/signup">Create one</Link>
         </p>
-
       </section>
-
     </main>
   );
 }
